@@ -23,6 +23,10 @@ header {
     background-color: brown;
 }
 
+body {
+    background-color: #F5F2EB;
+}
+
 footer {
     background-color: brown;
     text-align: center;
