@@ -22,3 +22,9 @@ a:hover {
 header {
     background-color: brown;
 }
+
+footer {
+    background-color: brown;
+    text-align: center;
+    color: white;
+}
