@@ -3,19 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Kontakt a Rezervace</title>
 </head>
 <body>
     <header>
-        <h1>
-
-        </h1>
+        <h1>Kontakt a Rezervace</h1>
+        <nav>
+            <a href="index.html">Domů</a>
+            <a href="O farnosti.html">O nás</a>
+            <a href="Akce.html">Bohoslužby</a>
+            <a href="Galerie.html">Galerie</a>
+            <a href="Kontakt.html">Kontakt</a>
+        </nav>
     </header>
-    <main>
-        <!-- Zde adresa, spojení/kontakt, a Bankovní spojení pro dary -->
-    </main>
-    <footer>
+    
+    <br>
 
+    <main>
+        <h2>Kontaktní formulář</h2>
+        <p>Máte dotaz? Napište nám.</p>
+        <form action="backend_kontakt.php" method="POST">
+            <label for="jmeno_kontakt">Jméno:</label><br>
+            <input type="text" id="jmeno_kontakt" name="jmeno" required><br><br>
+
+            <label for="email_kontakt">E-mail:</label><br>
+            <input type="email" id="email_kontakt" name="email" required><br><br>
+
+            <label for="zprava">Zpráva:</label><br>
+            <textarea id="zprava" name="zprava" rows="4" required></textarea><br><br>
+
+            <button type="submit">Odeslat dotaz</button>
+        </form>
+
+        <hr>
+
+        <h2>Rezervace úmyslu mše</h2>
+        <p>Zde si můžete rezervovat úmysl mše svaté.</p>
+        <form action="backend_rezervace.php" method="POST">
+            <label for="jmeno_rezervace">Jméno a příjmení:</label><br>
+            <input type="text" id="jmeno_rezervace" name="jmeno_prijmeni" required><br><br>
+
+            <label for="email_rezervace">E-mail:</label><br>
+            <input type="email" id="email_rezervace" name="kontakt_email" required><br><br>
+
+            <label for="datum">Požadované datum:</label><br>
+            <input type="date" id="datum" name="termin_akce" required><br><br>
+
+            <label for="umysl">Text úmyslu:</label><br>
+            <textarea id="umysl" name="obsah_zadosti" rows="3" required></textarea><br><br>
+
+            <button type="submit">Odeslat rezervaci</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Římskokatolická farnost Přeštice. Všechna práva vyhrazena.</p>
     </footer>
 </body>
 </html>
