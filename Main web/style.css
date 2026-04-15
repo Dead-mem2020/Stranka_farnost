@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 h1 {
     text-align: center;
 }
@@ -6,22 +12,18 @@ p{
     text-align: center;
 }
 
-nav {
-    text-align: center;
-}
 
-a {
-    text-decoration: none;
-    color: gold;
-}
 
-a:hover {
-    color: chocolate;
-}
 
 header {
-    background-color: brown;
+    background: brown;
+    text-align: center;
+    padding: 10px;
+    margin: 0;
 }
+
+
+
 
 body {
     background-color: #F5F2EB;
@@ -31,4 +33,78 @@ footer {
     background-color: brown;
     text-align: center;
     color: white;
+    
+    /*zařídí, že footer bude úplně dole v stránce*/
+    position: fixed;
+    background-color: red;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+    padding: 0.3rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    user-select: none;
+    font-weight: 700;
+    text-align: left;
+}
+
+.logo a {
+    color: gold;
+    text-decoration: none;
+}
+
+nav {
+    background: brown;
+    width: 100%;
+    padding: 0.05rem 5%;
+    
+    margin-bottom: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav {
+    list-style-type: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav li a{
+    position: relative;
+    font-size: 1.20rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: gold;
+    transition: 0.3s;
+}
+
+.nav li a:hover {
+    color: #F5F2EB;
+    transition: 0.3s;
+    text-shadow: 0 0 10px gold;
+}
+
+.login_btn {
+    display: flex;
+    font-size: 1rem;
+    padding: 0.7rem 2rem;
+    border-radius: 10%;
+    font-weight: 600;
+    background: gold;
+    border: none;
+    box-shadow: 0 0 15px #F5F2EB;
+    cursor: pointer;
+    
+    transition: 0.3s;
+}
+
+.login_btn:hover {
+    background: #F5F2EB;
+    border: gold;
+    box-shadow: 0 0 25px gold;
 }
