@@ -8,33 +8,9 @@
 </head>
 <body>
     <header>
-        <div class="Top">
-
-            <div class="logo">
-                <a href="index.html">Logo</a>
-            </div>
-
-            
-
-            <h1>
-                Římskokatolická farnost Přeštice
-            </h1>
-            
-            <br>
-
-            <h2>Vítejte na našich oficiálních stránkách. 
-                Jsme živé společenství věřících v srdci Přeštic. 
-                Najdete zde informace o bohoslužbách, svátostech a dění ve farnosti.
-            </h2>
-
-            
-        </div>
-
-        </header>
-
-        <br>
-
         <nav>
+            <img src="images/Farnost.png" alt="Farnost_Logo" id="logo">
+            
             <ul class="nav">
                 <li><a href="index.html">Domů</a></li>
                 <li><a href="O_farnosti.html">O nás</a></li>
@@ -42,51 +18,75 @@
                 <li><a href="Galerie.html">Galerie</a></li>
                 <li><a href="Kontakt.html">Kontakt</a></li>
             </ul>
+            
             <div class="btn">
                 <button class="login_btn">Přihlásit</button>
             </div>
         </nav>
+
+        <div class="hero">
+            <h1>Římskokatolická farnost Přeštice</h1>
+            <h2>Vítejte na našich oficiálních stránkách.<br>
+                Jsme živé společenství věřících v srdci Přeštic.<br>
+                Najdete zde informace o bohoslužbách, svátostech a dění ve farnosti.
+            </h2>
+        </div>
+    </header>
     
     
-    <br>
-    
-    <main>
-
-        <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel, laudantium veniam!
-            Pariatur cumque harum minima animi ab sapiente doloremque recusandae architecto deleniti odit deserunt qui nam quidem.
-            Atque voluptatibus cupiditate?
-        </p>
-
-        <a href="Akce.html"><button>Aktivní bohoslužby</button></a>
-
-       
-    <section class="aktuality">
-            <h2>Aktuality</h2>
-
-            <article>
-                <h3>Poutní mše svatá</h3>
-                <p><strong>24.5.2024</strong></p>
-                <p>Srdečně zveme všechny farníky i poutníky na slavnostní mši svatou ke cti našeho patrona, která se bude konat tuto neděli od 10:00 hodin. Po mši následuje farní agapé na zahradě.</p>
-            </article>
-
-            <article>
-                <h3>Brigáda na farní zahradě</h3>
-                <p><strong>18.5.2024</strong></p>
-                <p>Prosíme ochotné muže a ženy o pomoc při jarním úklidu farní zahrady. Sraz je v sobotu v 9:00. Občerstvení zajištěno.</p>
-            </article>
-
-            <article>
-                <h3>Výsledek Tříkrálové sbírky</h3>
-                <p><strong>10.5.2024</strong></p>
-                <p>Děkujeme všem dárcům. V naší obci se letos vybralo krásných 25 400 Kč, které podpoří charitní dílo v diecézi. Pán Bůh zaplať.</p>
-            </article>
+    <main class="container">
+        <section class="intro">
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel, laudantium veniam! Pariatur cumque harum minima animi ab sapiente doloremque recusandae architecto deleniti odit deserunt qui nam quidem. Atque voluptatibus cupiditate?</p>
+            <button class="cta_btn" id="showActiveEvents">Aktivní bohoslužby</button>
         </section>
 
+        <section class="panel-grid">
+            <section class="aktuality">
+                <h2>Aktuality</h2>
+                <div class="news-grid">
+                    <article class="news-card">
+                        <div class="news-date">24.5.2024</div>
+                        <h3>Poutní mše svatá</h3>
+                        <p>Srdečně zveme všechny farníky i poutníky na slavnostní mši svatou ke cti našeho patrona, která se bude konat tuto neděli od 10:00 hodin. Po mši následuje farní agapé na zahradě.</p>
+                    </article>
+
+                    <article class="news-card">
+                        <div class="news-date">18.5.2024</div>
+                        <h3>Brigáda na farní zahradě</h3>
+                        <p>Prosíme ochotné muže a ženy o pomoc při jarním úklidu farní zahrady. Sraz je v sobotu v 9:00. Občerstvení zajištěno.</p>
+                    </article>
+
+                    <article class="news-card">
+                        <div class="news-date">10.5.2024</div>
+                        <h3>Výsledek Tříkrálové sbírky</h3>
+                        <p>Děkujeme všem dárcům. V naší obci se letos vybralo krásných 25 400 Kč, které podpoří charitní dílo v diecézi. Pán Bůh zaplať.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="kalendar">
+                <h2>Kalendar</h2>
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <button id="prevMonth" type="button">&lsaquo;</button>
+                        <div class="calendar-title"><span id="calendarMonth"></span></div>
+                        <button id="nextMonth" type="button">&rsaquo;</button>
+                    </div>
+                    <div class="calendar-info" id="calendarInfo">Klikněte na tlačítko pro zobrazení aktivních bohoslužeb.</div>
+                    <div class="calendar-weekdays">
+                        <span>Po</span><span>Út</span><span>St</span><span>Čt</span><span>Pá</span><span>So</span><span>Ne</span>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+            </section>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2026 Římskokatolická farnost Přeštice. Všechna práva vyhrazena.</p>
     </footer>
+
+    <script src="../Javascript/backend/kalendar.js"></script>
+    <div class="footer-spacer"></div>
 </body>
 </html>
