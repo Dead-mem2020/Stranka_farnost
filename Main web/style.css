@@ -401,3 +401,44 @@ nav {
         font-size: 0.9rem;
     }
 }
+
+/* Additional sections */
+.section {
+    padding: 4rem 0;
+    background: white;
+}
+
+.section:nth-child(odd) {
+    background: #F5F2EB;
+}
+
+.section h2 {
+    color: #6F7D5C;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.section p {
+    text-align: left;
+    color: #555;
+    margin-bottom: 1rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

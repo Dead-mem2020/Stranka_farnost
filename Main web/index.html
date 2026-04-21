@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="images/Farnost.png">
     <title>Farnost 👍</title>
 </head>
 <body>
-    <header>
+    <header id="home">
         <nav>
             <img src="images/Farnost.png" alt="Farnost_Logo" id="logo">
             
             <ul class="nav">
-                <li><a href="index.html">Domů</a></li>
-                <li><a href="O_farnosti.html">O nás</a></li>
-                <li><a href="Akce.html">Bohoslužby</a></li>
-                <li><a href="Galerie.html">Galerie</a></li>
-                <li><a href="Kontakt.html">Kontakt</a></li>
+                <li><a href="#home">Domů</a></li>
+                <li><a href="#about">O nás</a></li>
+                <li><a href="#services">Bohoslužby</a></li>
+                <li><a href="#gallery">Galerie</a></li>
+                <li><a href="#contact">Kontakt</a></li>
             </ul>
             
             <div class="btn">
@@ -35,10 +36,6 @@
     
     
     <main class="container">
-        <section class="intro">
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel, laudantium veniam! Pariatur cumque harum minima animi ab sapiente doloremque recusandae architecto deleniti odit deserunt qui nam quidem. Atque voluptatibus cupiditate?</p>
-            <button class="cta_btn" id="showActiveEvents">Aktivní bohoslužby</button>
-        </section>
 
         <section class="panel-grid">
             <section class="aktuality">
@@ -81,6 +78,49 @@
             </section>
         </section>
     </main>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2>O nás</h2>
+            <p>Římskokatolická farnost Přeštice je živé společenství věřících, které se schází k bohoslužbám, modlitbám a společným aktivitám. Naše farnost je součástí plzeňské diecéze a snaží se být otevřeným místem pro všechny, kteří hledají duchovní útěchu a společenství.</p>
+            <p>Farnost vede P. Jan Novák, který je k dispozici pro duchovní vedení, svátosti a pastorační péči. Máme bohatou historii sahající až do 14. století, kdy byl postaven první kostel v Přešticích.</p>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <div class="container">
+            <h2>Bohoslužby</h2>
+            <p>Nabízíme pravidelné bohoslužby v kostele sv. Václava v Přešticích. Nedělní mše svatá se koná každou neděli v 10:00 hodin. Během týdne máme mše svaté ve středu a pátek večer.</p>
+            <p>Kromě pravidelných bohoslužeb pořádáme také svátosti křtu, biřmování, manželství a poslední pomazání. Pro děti a mládež organizujeme katecheze a různé aktivity.</p>
+            <button class="cta_btn" id="showActiveEvents">Aktivní bohoslužby</button>
+        </div>
+    </section>
+
+    <section id="gallery" class="section">
+        <div class="container">
+            <h2>Galerie</h2>
+            <p>Zde najdete fotografie z našich bohoslužeb, farních akcí a života farnosti. Galerie se pravidelně aktualizuje.</p>
+            <div class="gallery-grid">
+                <img src="images/placeholder1.jpg" alt="Fotografie 1">
+                <img src="images/placeholder2.jpg" alt="Fotografie 2">
+                <img src="images/placeholder3.jpg" alt="Fotografie 3">
+                <img src="images/placeholder4.jpg" alt="Fotografie 4">
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <div class="container">
+            <h2>Kontakt</h2>
+            <p>Římskokatolická farnost Přeštice<br>
+            Kostel sv. Václava<br>
+            Náměstí 123, 334 01 Přeštice<br>
+            Telefon: +420 123 456 789<br>
+            Email: farnost@prestice.cz</p>
+            <p>Farář: P. Jan Novák<br>
+            Úřední hodiny: Po-Pá 9:00-12:00</p>
+        </div>
+    </section>
 
     <footer>
         <p>&copy; 2026 Římskokatolická farnost Přeštice. Všechna práva vyhrazena.</p>
