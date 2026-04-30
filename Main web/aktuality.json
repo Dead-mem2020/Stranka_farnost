@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "datum": "24.5.2024",
+    "nazev": "Poutní mše svatá",
+    "text": "Srdečně zveme všechny farníky i poutníky na slavnostní mši svatou ke cti našeho patrona, která se bude konat tuto neděli od 10:00 hodin. Po mši následuje farní agapé na zahradě."
+  },
+  {
+    "id": 2,
+    "datum": "18.5.2024",
+    "nazev": "Brigáda na farní zahradě",
+    "text": "Prosíme ochotné muže a ženy o pomoc při jarním úklidu farní zahrady. Sraz je v sobotu v 9:00. Občerstvení zajištěno."
+  },
+  {
+    "id": 3,
+    "datum": "10.5.2024",
+    "nazev": "Výsledek Tříkrálové sbírky",
+    "text": "Děkujeme všem dárcům. V naší obci se letos vybralo krásných 25 400 Kč, které podpoří charitní dílo v diecézi. Pán Bůh zaplať."
+  }
+]

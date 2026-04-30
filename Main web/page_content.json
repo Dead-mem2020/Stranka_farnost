@@ -1,0 +1,20 @@
+{
+    "about": {
+        "title": "O nás",
+        "content": "Římskokatolická farnost Přeštice je živé společenství věřících, které se schází k bohoslužbám, modlitbám a společným aktivitám. Naše farnost je součástí plzeňské diecéze a snaží se být otevřeným místem pro všechny, kteří hledají duchovní útěchu a společenství.",
+        "content2": "Farnost vede P. Jan Novák, který je k dispozici pro duchovní vedení, svátosti a pastorační péči. Máme bohatou historii sahající až do 14. století, kdy byl postaven první kostel v Přešticích."
+    },
+    "services": {
+        "title": "Bohoslužby",
+        "content": "Nabízíme pravidelné bohoslužby v kostele sv. Václava v Přešticích. Nedělní mše svatá se koná každou neděli v 10:00 hodin. Během týdne máme mše svaté ve středu a pátek večer.",
+        "content2": "Kromě pravidelných bohoslužeb pořádáme také svátosti křtu, biřmování, manželství a poslední pomazání. Pro děti a mládež organizujeme katecheze a různé aktivity."
+    },
+    "contact": {
+        "title": "Kontakt",
+        "address": "Kostel sv. Václava<br>Náměstí 123, 334 01 Přeštice",
+        "phone": "+420 123 456 789",
+        "email": "farnost@prestice.cz",
+        "farar": "P. Jan Novák",
+        "hours": "Po-Pá 9:00-12:00"
+    }
+}
