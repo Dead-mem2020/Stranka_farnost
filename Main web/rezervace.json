@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "id": 1777919925,
+        "jmeno": "Cyril Dějkoval",
+        "email": "Cyroval@gmail.com",
+        "datum": "2026-05-21",
+        "sluzba": "Individuální duchovní rozhovor \/ Zpověď",
+        "zprava": "Chtěl bych se zpovídat společně se svým přítelem"
+    },
+    {
+        "id": 1777922796,
+        "jmeno": "Cyril Dějkoval",
+        "email": "Cyroval@gmail.com",
+        "datum": "2026-05-05T12:00",
+        "sluzba": "Běžná bohoslužba",
+        "zprava": ""
+    }
+]

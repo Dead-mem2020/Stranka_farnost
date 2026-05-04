@@ -13,6 +13,20 @@ $galerie = json_decode(file_get_contents('galerie.json'), true) ?? [];
 $dotazy = json_decode(file_get_contents('dotazy.json'), true) ?? [];
 $rezervace = json_decode(file_get_contents('rezervace.json'), true) ?? [];
 
+// Load or create services (sluzby)
+$sluzby = json_decode(@file_get_contents('sluzby.json'), true);
+if ($sluzby === null) {
+    // Pokud soubor neexistuje, vytvoříme ho s výchozími hodnotami
+    $sluzby = [
+        ['id' => 1, 'nazev' => 'Běžná bohoslužba'],
+        ['id' => 2, 'nazev' => 'Křest'],
+        ['id' => 3, 'nazev' => 'Svatba'],
+        ['id' => 4, 'nazev' => 'Pohřeb'],
+        ['id' => 5, 'nazev' => 'Individuální duchovní rozhovor / Zpověď']
+    ];
+    file_put_contents('sluzby.json', json_encode($sluzby, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+}
+
 // Load page content
 $pageContent = json_decode(file_get_contents('page_content.json'), true) ?? [
     'about' => [
@@ -117,12 +131,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         file_put_contents('rezervace.json', json_encode(array_values($rezervace), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         $message = 'Rezervace byla smazána.';
     }
+
+    // Add new service (služba)
+    if (isset($_POST['action']) && $_POST['action'] === 'add_sluzba') {
+        $newSluzba = [
+            'id' => time(),
+            'nazev' => $_POST['nazev'] ?? ''
+        ];
+        $sluzby[] = $newSluzba;
+        file_put_contents('sluzby.json', json_encode($sluzby, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        $message = 'Služba byla přidána.';
+    }
+
+    // Delete service (služba)
+    if (isset($_POST['action']) && $_POST['action'] === 'delete_sluzba') {
+        $id = intval($_POST['id']);
+        $sluzby = array_filter($sluzby, function($s) use ($id) { return $s['id'] != $id; });
+        file_put_contents('sluzby.json', json_encode(array_values($sluzby), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        $message = 'Služba byla smazána.';
+    }
     
     // Reload data after changes
     $aktuality = json_decode(file_get_contents('aktuality.json'), true) ?? [];
     $galerie = json_decode(file_get_contents('galerie.json'), true) ?? [];
     $dotazy = json_decode(file_get_contents('dotazy.json'), true) ?? [];
     $rezervace = json_decode(file_get_contents('rezervace.json'), true) ?? [];
+    $sluzby = json_decode(file_get_contents('sluzby.json'), true) ?? [];
 }
 ?>
 <!DOCTYPE html>
@@ -189,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="admin-container">
         <div class="admin-header">
-            <h1>🔧 Admin Panel - Farnost Přeštice</h1>
+            <h1>Admin Panel - Farnost Přeštice</h1>
             <div>
                 <span style="margin-right: 1rem;">Přihlášen: <?php echo htmlspecialchars($_SESSION['admin_name']); ?></span>
                 <a href="logout.php" class="logout-btn">Odhlásit</a>
@@ -406,14 +440,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Rezervace Tab -->
             <div class="tab-panel <?php echo $activeTab === 'rezervace' ? 'active' : ''; ?>" id="rezervace">
-                <h2>Rezervace</h2>
+                
+                <!-- Nová sekce: Správa druhů služeb -->
+                <h2>Správa nabízených služeb</h2>
+                
+                <div class="form-section">
+                    <h3>Přidat novou službu do nabídky</h3>
+                    <form method="POST">
+                        <input type="hidden" name="action" value="add_sluzba">
+                        <div class="form-group">
+                            <label>Název služby:</label>
+                            <input type="text" name="nazev" placeholder="Např. Modlitba za uzdravení" required>
+                        </div>
+                        <button type="submit" class="btn">Přidat službu</button>
+                    </form>
+                </div>
+
+                <h3>Existující služby v nabídce</h3>
+                <ul class="item-list" style="margin-bottom: 3rem;">
+                    <?php foreach ($sluzby as $sluzba): ?>
+                        <li>
+                            <div class="item-info">
+                                <h4><?php echo htmlspecialchars($sluzba['nazev'] ?? ''); ?></h4>
+                            </div>
+                            <div class="item-actions">
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete_sluzba">
+                                    <input type="hidden" name="id" value="<?php echo $sluzba['id']; ?>">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Opravdu smazat tuto službu?')">🗑️</button>
+                                </form>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                    <?php if (empty($sluzby)): ?>
+                        <li><p class="empty-message">Nemáte nastavené žádné služby.</p></li>
+                    <?php endif; ?>
+                </ul>
+
+                <hr style="border: 1px solid #ddd; margin-bottom: 2rem;">
+
+                <!-- Sekce: Přehled odeslaných rezervací -->
+                <h2>Přijaté rezervace</h2>
                 <ul class="item-list">
                     <?php foreach (array_reverse($rezervace) as $rez): ?>
                         <li>
                             <div class="item-info">
                                 <h4><?php echo htmlspecialchars($rez['jmeno'] ?? ''); ?> (<?php echo htmlspecialchars($rez['email'] ?? ''); ?>)</h4>
-                                <p><?php echo htmlspecialchars($rez['datum'] ?? ''); ?></p>
-                                <p><?php echo htmlspecialchars($rez['zprava'] ?? ''); ?></p>
+                                <p><strong>Datum:</strong> <?php echo htmlspecialchars($rez['datum'] ?? ''); ?></p>
+                                <p><strong>Požadovaná služba:</strong> <span style="color: #E09D8D; font-weight: bold;"><?php echo htmlspecialchars($rez['sluzba'] ?? 'Nespecifikováno'); ?></span></p>
+                                <p><strong>Zpráva:</strong> <?php echo htmlspecialchars($rez['zprava'] ?? ''); ?></p>
                             </div>
                             <div class="item-actions">
                                 <form method="POST" style="display:inline;">

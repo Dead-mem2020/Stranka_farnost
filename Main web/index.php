@@ -1,11 +1,31 @@
 <?php
 session_start();
 
+// rezervace
+$rezervaceMessage = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'rezervace') {
+    $rezervaceData = json_decode(file_get_contents('rezervace.json'), true) ?? [];
+    
+    $novaRezervace = [
+        'id' => time(),
+        'jmeno' => $_POST['jmeno'] ?? '',
+        'email' => $_POST['email'] ?? '',
+        'datum' => $_POST['datum'] ?? '',
+        'sluzba' => $_POST['sluzba'] ?? '',
+        'zprava' => $_POST['zprava'] ?? ''
+    ];
+    
+    $rezervaceData[] = $novaRezervace;
+    file_put_contents('rezervace.json', json_encode($rezervaceData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    $rezervaceMessage = 'Vaše rezervace byla úspěšně odeslána!';
+}
+
 // Simple admin authentication check
 $isLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 $adminName = $_SESSION['admin_name'] ?? 'Administrátor';
 
 // Load data from JSON files
+$sluzby = json_decode(file_get_contents('sluzby.json'), true) ?? [];
 $aktuality = json_decode(file_get_contents('aktuality.json'), true) ?? [];
 $galerie = json_decode(file_get_contents('galerie.json'), true) ?? [];
 $pageContent = json_decode(file_get_contents('page_content.json'), true) ?? [
@@ -103,7 +123,57 @@ $pageContent = json_decode(file_get_contents('page_content.json'), true) ?? [
             <h2>Bohoslužby</h2>
             <p><?php echo nl2br(htmlspecialchars($pageContent['services']['content'] ?? '')); ?></p>
             <p><?php echo nl2br(htmlspecialchars($pageContent['services']['content2'] ?? '')); ?></p>
-            <button class="cta_btn" id="showActiveEvents">Aktivní bohoslužby</button>
+            <button class="cta_btn" id="showActiveEvents">Rezervovat bohoslužbu</button>
+
+            <div id="rezervaceModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
+                    <h3>Rezervace služby</h3>
+                    
+                    <?php if (!empty($rezervaceMessage)): ?>
+                        <div class="success-msg"><?php echo $rezervaceMessage; ?></div>
+                    <?php endif; ?>
+                    
+                    <form method="POST" action="index.php#services" class="rezervace-form">
+                        <input type="hidden" name="action" value="rezervace">
+                        
+                        <div class="form-group">
+                            <label for="jmeno">Jméno a příjmení <span style="color: red;">*</span></label>
+                            <input type="text" id="jmeno" name="jmeno" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail <span style="color: red;">*</span></label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="datum">Datum a čas bohoslužby <span style="color: red;">*</span></label>
+                            <input type="datetime-local" id="datum" name="datum" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sluzba">Výběr služby <span style="color: red;">*</span></label>
+                            <select id="sluzba" name="sluzba" required>
+                                <option value="">-- Vyberte, co požadujete --</option>
+                                <?php foreach ($sluzby as $sluzba): ?>
+                                    <option value="<?php echo htmlspecialchars($sluzba['nazev']); ?>">
+                                        <?php echo htmlspecialchars($sluzba['nazev']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="zprava">Zpráva / Poznámka</label>
+                            <textarea id="zprava" name="zprava" rows="4"></textarea>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; text-align: left;"><span style="color: red;">*</span> vyžadováno vyplnit</p>
+                        </div>
+                        
+                        <button type="submit" class="cta_btn" style="width: 100%; margin-top: 10px;">Odeslat rezervaci</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -136,5 +206,38 @@ $pageContent = json_decode(file_get_contents('page_content.json'), true) ?? [
 
     <script src="../Javascript/backend/kalendar.js"></script>
     <div class="footer-spacer"></div>
+
+    <!--Skript pro rezervac-->
+    <script>
+        const modal = document.getElementById("rezervaceModal");
+        const btn = document.getElementById("showActiveEvents");
+        const span = document.getElementsByClassName("close-btn")[0];
+
+        // Otevření modalu
+        if (btn) {
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+        }
+
+        // Zavření křížkem
+        if (span) {
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        }
+
+        // Zavření kliknutím mimo okno
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Automatické zobrazení modalu, pokud byla rezervace úspěšně odeslána
+        <?php if (!empty($rezervaceMessage)): ?>
+            modal.style.display = "block";
+        <?php endif; ?>
+    </script>
 </body>
 </html>
