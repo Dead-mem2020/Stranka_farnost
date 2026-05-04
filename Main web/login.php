@@ -9,17 +9,30 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 
 $error = '';
 
+// Define admin accounts with roles
+// standard: content management (events, photos, bookings)
+// advanced: page editing, layout, settings, and all standard features
+$adminAccounts = [
+    'admin' => [
+        'password' => 'farnost2026',
+        'name' => 'Administrátor',
+        'role' => 'advanced'  // Full access
+    ],
+    'manager' => [
+        'password' => 'manager2026',
+        'name' => 'Správce obsahu',
+        'role' => 'standard'  // Content management only
+    ]
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     
-    // Admin credentials (change these for security)
-    $adminUser = 'admin';
-    $adminPass = 'farnost2026'; // Change this password!
-    
-    if ($username === $adminUser && $password === $adminPass) {
+    if (isset($adminAccounts[$username]) && $adminAccounts[$username]['password'] === $password) {
         $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_name'] = 'Administrátor';
+        $_SESSION['admin_name'] = $adminAccounts[$username]['name'];
+        $_SESSION['admin_role'] = $adminAccounts[$username]['role'];
         header("Location: admin.php");
         exit;
     } else {

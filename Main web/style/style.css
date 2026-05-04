@@ -268,25 +268,32 @@ nav {
 }
 
 .cta_btn {
-    display: inline-flex;
+    display: block;
+    margin: 2rem auto;
     align-items: center;
     justify-content: center;
-    font-size: 1.05rem;
-    padding: 0.8rem 2.5rem;
-    border-radius: 25px;
-    font-weight: 600;
-    background: linear-gradient(90deg, #E09D8D 0%, #EDB5A6 100%);
+    font-size: 1.15rem;
+    padding: 1.2rem 3rem;
+    border-radius: 30px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #E09D8D 0%, #EDB5A6 100%);
     color: white;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(224, 157, 141, 0.3);
+    box-shadow: 0 6px 15px rgba(224, 157, 141, 0.4);
+    text-align: center;
+    min-width: 250px;
 }
 
 .cta_btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(224, 157, 141, 0.4);
-    background: linear-gradient(90deg, #EDB5A6 0%, #E09D8D 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(224, 157, 141, 0.5);
+    background: linear-gradient(135deg, #EDB5A6 0%, #E09D8D 100%);
+}
+
+.cta_btn:active {
+    transform: translateY(-1px);
 }
 
 /* Aktuality (News) Section */
@@ -457,14 +464,26 @@ nav {
 
 .modal-content {
     background-color: #F5F2EB;
-    margin: 5% auto;
+    margin: 3% auto;
     padding: 2.5rem;
-    border-radius: 12px;
+    border-radius: 15px;
     width: 90%;
-    max-width: 600px;
+    max-width: 650px;
     position: relative;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    border-top: 6px solid #6F7D5C;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    border-top: 5px solid #E09D8D;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .close-btn {
@@ -472,45 +491,49 @@ nav {
     position: absolute;
     right: 20px;
     top: 15px;
-    font-size: 30px;
+    font-size: 32px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s;
+    line-height: 1;
 }
 
 .close-btn:hover {
     color: #E09D8D;
+    transform: scale(1.2);
 }
 
 .modal-content h3 {
     color: #6F7D5C;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.8rem;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.9rem;
 }
 
 .rezervace-form .form-group {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
     text-align: left;
 }
 
 .rezervace-form label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
     color: #333;
     font-weight: 600;
+    font-size: 1rem;
 }
 
 .rezervace-form input,
 .rezervace-form select,
 .rezervace-form textarea {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid rgba(111, 125, 92, 0.3);
-    border-radius: 5px;
+    padding: 0.95rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
     font-family: inherit;
     font-size: 1rem;
     background: white;
+    transition: border-color 0.3s;
 }
 
 .rezervace-form input:focus,
@@ -518,16 +541,61 @@ nav {
 .rezervace-form textarea:focus {
     outline: none;
     border-color: #E09D8D;
-    box-shadow: 0 0 5px rgba(224, 157, 141, 0.4);
+    box-shadow: 0 0 8px rgba(224, 157, 141, 0.3);
+}
+
+.rezervace-form textarea {
+    resize: vertical;
+    min-height: 100px;
 }
 
 .success-msg {
     background: #e8f5e9;
     color: #2e7d32;
-    padding: 1rem;
-    border-radius: 5px;
+    padding: 1.2rem;
+    border-radius: 8px;
     margin-bottom: 1.5rem;
     text-align: center;
     font-weight: bold;
     border-left: 5px solid #4caf50;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+/* Mobile Responsive - Modal and Button */
+@media (max-width: 768px) {
+    .cta_btn {
+        font-size: 1rem;
+        padding: 1rem 2rem;
+        min-width: 200px;
+        margin: 1.5rem auto;
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        padding: 1.8rem;
+        width: 95%;
+        border-radius: 12px;
+    }
+    
+    .modal-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1.3rem;
+    }
+    
+    .close-btn {
+        right: 15px;
+        top: 12px;
+        font-size: 28px;
+    }
+    
+    .rezervace-form .form-group {
+        margin-bottom: 1.2rem;
+    }
+    
+    .rezervace-form input,
+    .rezervace-form select,
+    .rezervace-form textarea {
+        padding: 0.85rem;
+        font-size: 16px;
+    }
 }

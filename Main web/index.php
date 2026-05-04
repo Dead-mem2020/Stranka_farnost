@@ -166,11 +166,11 @@ $pageContent = json_decode(file_get_contents('page_content.json'), true) ?? [
                         
                         <div class="form-group">
                             <label for="zprava">Zpráva / Poznámka</label>
-                            <textarea id="zprava" name="zprava" rows="4"></textarea>
-                            <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; text-align: left;"><span style="color: red;">*</span> vyžadováno vyplnit</p>
+                            <textarea id="zprava" name="zprava" rows="4" placeholder="Vaše poznámka (nepovinné)..."></textarea>
+                            <p style="font-size: 0.8rem; color: #999; margin-top: 0.3rem; text-align: left;"><span style="color: red;">*</span> vyžadováno vyplnit</p>
                         </div>
                         
-                        <button type="submit" class="cta_btn" style="width: 100%; margin-top: 10px;">Odeslat rezervaci</button>
+                        <button type="submit" class="cta_btn" style="width: 100%; margin: 1.5rem auto 0; min-width: auto;">Odeslat rezervaci</button>
                     </form>
                 </div>
             </div>
@@ -204,39 +204,18 @@ $pageContent = json_decode(file_get_contents('page_content.json'), true) ?? [
         <p>&copy; 2026 Římskokatolická farnost Přeštice. Všechna práva vyhrazena.</p>
     </footer>
 
-    <script src="../Javascript/backend/kalendar.js"></script>
+    <script src="../Backend/JavaScript/script.js"></script>
     <div class="footer-spacer"></div>
 
-    <!--Skript pro rezervac-->
     <script>
-        const modal = document.getElementById("rezervaceModal");
-        const btn = document.getElementById("showActiveEvents");
-        const span = document.getElementsByClassName("close-btn")[0];
-
-        // Otevření modalu
-        if (btn) {
-            btn.onclick = function() {
-                modal.style.display = "block";
-            }
-        }
-
-        // Zavření křížkem
-        if (span) {
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-        }
-
-        // Zavření kliknutím mimo okno
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Automatické zobrazení modalu, pokud byla rezervace úspěšně odeslána
+        // Auto-show modal if reservation was successful
         <?php if (!empty($rezervaceMessage)): ?>
-            modal.style.display = "block";
+            document.addEventListener('DOMContentLoaded', () => {
+                const modal = document.getElementById("rezervaceModal");
+                if (modal) {
+                    modal.style.display = "block";
+                }
+            });
         <?php endif; ?>
     </script>
 </body>

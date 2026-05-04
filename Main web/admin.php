@@ -7,6 +7,35 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 
+// Determine admin role (default to 'standard' for backward compatibility)
+$adminRole = $_SESSION['admin_role'] ?? 'standard';
+$isAdvancedAdmin = $adminRole === 'advanced';
+$isStandardAdmin = $adminRole === 'standard' || $isAdvancedAdmin;  // Advanced can do everything standard can
+
+// Helper function to check permission
+function checkPermission($role, $action) {
+    $permissions = [
+        'standard' => [
+            'aktuality' => true,
+            'gallery' => true,
+            'dotazy' => true,
+            'rezervace' => true,
+            'sluzby' => true
+        ],
+        'advanced' => [
+            'aktuality' => true,
+            'gallery' => true,
+            'dotazy' => true,
+            'rezervace' => true,
+            'sluzby' => true,
+            'content' => true,  // Only advanced can edit page content
+            'settings' => true
+        ]
+    ];
+    
+    return $permissions[$role][$action] ?? false;
+}
+
 // Load data files
 $aktuality = json_decode(file_get_contents('aktuality.json'), true) ?? [];
 $galerie = json_decode(file_get_contents('galerie.json'), true) ?? [];
@@ -52,11 +81,17 @@ $pageContent = json_decode(file_get_contents('page_content.json'), true) ?? [
 $message = '';
 $activeTab = $_GET['tab'] ?? 'aktuality';
 
+// Prevent standard admins from accessing the content tab
+if ($activeTab === 'obsah' && !$isAdvancedAdmin) {
+    $activeTab = 'aktuality';
+}
+
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
     
-    // Add new aktualita
-    if (isset($_POST['action']) && $_POST['action'] === 'add_aktualita') {
+    // Add new aktualita (Standard + Advanced)
+    if ($action === 'add_aktualita' && checkPermission($adminRole, 'aktuality')) {
         $newAktualita = [
             'id' => time(),
             'datum' => $_POST['datum'] ?? date('d.m.Y'),
@@ -68,16 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'Aktualita byla přidána.';
     }
     
-    // Delete aktualita
-    if (isset($_POST['action']) && $_POST['action'] === 'delete_aktualita') {
+    // Delete aktualita (Standard + Advanced)
+    elseif ($action === 'delete_aktualita' && checkPermission($adminRole, 'aktuality')) {
         $id = intval($_POST['id']);
         $aktuality = array_filter($aktuality, function($a) use ($id) { return $a['id'] != $id; });
         file_put_contents('aktuality.json', json_encode(array_values($aktuality), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         $message = 'Aktualita byla smazána.';
     }
     
-    // Add gallery image
-    if (isset($_POST['action']) && $_POST['action'] === 'add_gallery') {
+    // Add gallery image (Standard + Advanced)
+    elseif ($action === 'add_gallery' && checkPermission($adminRole, 'gallery')) {
         $newImage = [
             'id' => time(),
             'src' => $_POST['src'] ?? '',
@@ -88,16 +123,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'Obrázek byl přidán do galerie.';
     }
     
-    // Delete gallery image
-    if (isset($_POST['action']) && $_POST['action'] === 'delete_gallery') {
+    // Delete gallery image (Standard + Advanced)
+    elseif ($action === 'delete_gallery' && checkPermission($adminRole, 'gallery')) {
         $id = intval($_POST['id']);
         $galerie = array_filter($galerie, function($g) use ($id) { return $g['id'] != $id; });
         file_put_contents('galerie.json', json_encode(array_values($galerie), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         $message = 'Obrázek byl smazán z galerie.';
     }
     
-    // Update page content
-    if (isset($_POST['action']) && $_POST['action'] === 'update_content') {
+    // Update page content (Advanced Only)
+    elseif ($action === 'update_content' && checkPermission($adminRole, 'content')) {
         $section = $_POST['section'] ?? '';
         if ($section === 'about') {
             $pageContent['about']['content'] = $_POST['content'] ?? '';
@@ -115,25 +150,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         file_put_contents('page_content.json', json_encode($pageContent, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         $message = 'Obsah byl aktualizován.';
     }
+    elseif ($action === 'update_content' && !checkPermission($adminRole, 'content')) {
+        $message = 'Nemáte oprávnění upravovat obsah stránky. Toto je dostupné pouze pro pokročilé administrátory.';
+    }
     
-    // Delete query
-    if (isset($_POST['action']) && $_POST['action'] === 'delete_dotaz') {
+    // Delete query (Standard + Advanced)
+    elseif ($action === 'delete_dotaz' && checkPermission($adminRole, 'dotazy')) {
         $id = intval($_POST['id']);
         $dotazy = array_filter($dotazy, function($d) use ($id) { return $d['id'] != $id; });
         file_put_contents('dotazy.json', json_encode(array_values($dotazy), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         $message = 'Dotaz byl smazán.';
     }
     
-    // Delete reservation
-    if (isset($_POST['action']) && $_POST['action'] === 'delete_rezervace') {
+    // Delete reservation (Standard + Advanced)
+    elseif ($action === 'delete_rezervace' && checkPermission($adminRole, 'rezervace')) {
         $id = intval($_POST['id']);
         $rezervace = array_filter($rezervace, function($r) use ($id) { return $r['id'] != $id; });
         file_put_contents('rezervace.json', json_encode(array_values($rezervace), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
         $message = 'Rezervace byla smazána.';
     }
 
-    // Add new service (služba)
-    if (isset($_POST['action']) && $_POST['action'] === 'add_sluzba') {
+    // Add new service (Standard + Advanced)
+    elseif ($action === 'add_sluzba' && checkPermission($adminRole, 'sluzby')) {
         $newSluzba = [
             'id' => time(),
             'nazev' => $_POST['nazev'] ?? ''
@@ -143,8 +181,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'Služba byla přidána.';
     }
 
-    // Delete service (služba)
-    if (isset($_POST['action']) && $_POST['action'] === 'delete_sluzba') {
+    // Delete service (Standard + Advanced)
+    elseif ($action === 'delete_sluzba' && checkPermission($adminRole, 'sluzby')) {
         $id = intval($_POST['id']);
         $sluzby = array_filter($sluzby, function($s) use ($id) { return $s['id'] != $id; });
         file_put_contents('sluzby.json', json_encode(array_values($sluzby), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
@@ -226,6 +264,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1>Admin Panel - Farnost Přeštice</h1>
             <div>
                 <span style="margin-right: 1rem;">Přihlášen: <?php echo htmlspecialchars($_SESSION['admin_name']); ?></span>
+                <span style="margin-right: 1rem; padding: 0.3rem 0.8rem; background: <?php echo $isAdvancedAdmin ? '#27ae60' : '#3498db'; ?>; color: white; border-radius: 3px; font-size: 0.85rem;">
+                    <?php echo $isAdvancedAdmin ? 'Pokročilý administrátor' : 'Správce obsahu'; ?>
+                </span>
                 <a href="logout.php" class="logout-btn">Odhlásit</a>
             </div>
         </div>
@@ -256,7 +297,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="admin-tabs">
             <button class="admin-tab <?php echo $activeTab === 'aktuality' ? 'active' : ''; ?>" onclick="location.href='?tab=aktuality'">📰 Aktuality</button>
             <button class="admin-tab <?php echo $activeTab === 'galerie' ? 'active' : ''; ?>" onclick="location.href='?tab=galerie'">🖼️ Galerie</button>
-            <button class="admin-tab <?php echo $activeTab === 'obsah' ? 'active' : ''; ?>" onclick="location.href='?tab=obsah'">📝 Obsah stránek</button>
+            <?php if ($isAdvancedAdmin): ?>
+                <button class="admin-tab <?php echo $activeTab === 'obsah' ? 'active' : ''; ?>" onclick="location.href='?tab=obsah'">📝 Obsah stránek</button>
+            <?php endif; ?>
             <button class="admin-tab <?php echo $activeTab === 'dotazy' ? 'active' : ''; ?>" onclick="location.href='?tab=dotazy'">📧 Dotazy</button>
             <button class="admin-tab <?php echo $activeTab === 'rezervace' ? 'active' : ''; ?>" onclick="location.href='?tab=rezervace'">📅 Rezervace</button>
         </div>
@@ -344,7 +387,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <!-- Obsah Tab -->
+            <!-- Obsah Tab - Advanced Admin Only -->
+            <?php if ($isAdvancedAdmin): ?>
             <div class="tab-panel <?php echo $activeTab === 'obsah' ? 'active' : ''; ?>" id="obsah">
                 <h2>Správa obsahu stránek</h2>
                 
@@ -411,6 +455,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </form>
                 </div>
             </div>
+            <?php endif; ?>
 
             <!-- Dotazy Tab -->
             <div class="tab-panel <?php echo $activeTab === 'dotazy' ? 'active' : ''; ?>" id="dotazy">
